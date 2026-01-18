@@ -1,5 +1,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:i_thera_dashboard/features/notification/data/data_sources/notification_remote_data_source.dart';
+import 'package:i_thera_dashboard/features/notification/data/repositery/notification_impl_repo.dart';
+import 'package:i_thera_dashboard/features/notification/data/repositery/notification_repo.dart';
+import 'package:i_thera_dashboard/features/notification/managers/cubit/notification_cubit.dart';
+import 'package:i_thera_dashboard/features/notification/managers/doctor_details_cubit/doctor_details_cubit.dart';
+import 'package:i_thera_dashboard/features/notification/managers/wallet_request_cubit/cubit/wallet_request_cubit.dart';
 import '../../features/auth/data/data_sources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -33,10 +39,9 @@ Future<void> init() async {
 
   // Features - Home
   // Bloc
-  sl.registerFactory(() => HomeCubit(
-        homeRepository: sl(),
-        patientsRepository: sl(),
-      ));
+  sl.registerFactory(
+    () => HomeCubit(homeRepository: sl(), patientsRepository: sl()),
+  );
 
   // Repository
   sl.registerLazySingleton<HomeRepository>(
@@ -63,5 +68,37 @@ Future<void> init() async {
   );
 
   // Core
-  sl.registerLazySingleton<Dio>(() => DioHelper.dio); // Assumes DioHelper.init() is called, or modify setup
+  sl.registerLazySingleton<Dio>(
+    () => DioHelper.dio,
+  ); // Assumes DioHelper.init() is called, or modify setup
+
+  sl.registerLazySingleton<NotificationsRemoteDataSource>(
+    () => NotificationsRemoteDataSourceImpl(),
+  );
+
+  // Repositories
+  sl.registerLazySingleton<NotificationsRepository>(
+    () => NotificationsRepositoryImpl(
+      remoteDataSource: sl<NotificationsRemoteDataSource>(),
+    ),
+  );
+
+  // Cubits
+  sl.registerFactory(
+    () => NotificationsCubit(
+      notificationsRepository: sl<NotificationsRepository>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => DoctorDetailCubit(
+      notificationsRepository: sl<NotificationsRepository>(),
+    ),
+  );
+
+  sl.registerFactory(
+    () => WalletRequestCubit(
+      notificationsRepository: sl<NotificationsRepository>(),
+    ),
+  );
 }

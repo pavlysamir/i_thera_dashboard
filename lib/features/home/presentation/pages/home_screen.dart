@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/core/theme/app_colors.dart';
+import 'package:i_thera_dashboard/features/notification/managers/cubit/notification_cubit.dart';
+import 'package:i_thera_dashboard/features/notification/presentation/screens/notification_screen.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../manager/home_cubit.dart';
 import '../../manager/home_state.dart';
@@ -153,7 +155,20 @@ class _TopBar extends StatelessWidget {
             // Header Icons (Notification / Settings)
             CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(Icons.notifications_none, color: Colors.blue),
+              child: IconButton(
+                icon: Icon(Icons.notifications_none, color: Colors.blue),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (context) => sl<NotificationsCubit>(),
+                        child: const NotificationsScreen(),
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(width: 8),
             CircleAvatar(
