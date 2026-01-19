@@ -18,6 +18,7 @@ import '../../features/patients/data/data_sources/patients_remote_data_source.da
 import '../../features/patients/data/repositories/patients_repository.dart';
 import '../../features/patients/data/repositories/patients_repository_impl.dart';
 import '../../features/patients/manager/patients_cubit.dart';
+import '../../features/patients/manager/patient_detail_cubit.dart';
 import '../network/dio_helper.dart';
 
 final sl = GetIt.instance;
@@ -66,6 +67,9 @@ Future<void> init() async {
   sl.registerLazySingleton<PatientsRemoteDataSource>(
     () => PatientsRemoteDataSourceImpl(),
   );
+
+  sl.registerFactory(
+      () => PatientDetailCubit(patientsRepository: sl()));
 
   // Core
   sl.registerLazySingleton<Dio>(

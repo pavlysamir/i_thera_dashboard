@@ -11,6 +11,13 @@ abstract class PatientsRemoteDataSource {
     required int pageSize,
     String? patientName,
   });
+
+  Future<void> approveOrDisapprove({
+    required int userId,
+    required int role,
+    required bool isApproved,
+    String? adminNote,
+  });
 }
 
 class PatientsRemoteDataSourceImpl implements PatientsRemoteDataSource {
@@ -42,7 +49,7 @@ class PatientsRemoteDataSourceImpl implements PatientsRemoteDataSource {
         if (data.containsKey('isSuccess') && data['isSuccess'] == false) {
           throw ServerException(errModel: ErrorModel.fromJson(data));
         }
-        
+
         // API response structure: { isSuccess, responseData: { pageIndex, pageSize, count, items } }
         return PatientsResponse.fromJson(data);
       } else {
@@ -55,5 +62,48 @@ class PatientsRemoteDataSourceImpl implements PatientsRemoteDataSource {
       throw ServerException(errModel: ErrorModel.fromJson(e.response?.data));
     }
   }
-}
 
+  @override
+  Future<void> approveOrDisapprove({
+    required int userId,
+    required int role,
+    required bool isApproved,
+    String? adminNote,
+  }) async {
+    try {
+      final response = await DioHelper.putData(
+        url: ApiEndpoints.approveOrDisapprove,
+        data: {
+          'userId': userId,
+          'role': role,
+          'isApproved': isApproved,
+          'adminNote': adminNote ?? '',
+        },
+      );
+
+      final data = response.data;
+
+      if (data is Map<String, dynamic>) {
+        // Check for both 'success' and 'isSuccess' fields
+        final isSuccess = data['success'] == true || data['isSuccess'] == true;
+
+        if (!isSuccess) {
+          throw ServerException(
+            errModel: ErrorModel(
+              errorMessage: data['message'] ?? 'Operation failed',
+            ),
+          );
+        }
+        // Success - no need to throw anything
+        return;
+      } else {
+        throw ServerException(
+          errModel: ErrorModel(errorMessage: 'Invalid Response'),
+        );
+      }
+    } on DioException catch (e) {
+      handleDioExceptions(e);
+      throw ServerException(errModel: ErrorModel.fromJson(e.response?.data));
+    }
+  }
+}

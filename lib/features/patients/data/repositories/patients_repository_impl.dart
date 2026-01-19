@@ -33,5 +33,32 @@ class PatientsRepositoryImpl implements PatientsRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> approveOrDisapprove({
+    required int userId,
+    required int role,
+    required bool isApproved,
+    String? adminNote,
+  }) async {
+    try {
+      await remoteDataSource.approveOrDisapprove(
+        userId: userId,
+        role: role,
+        isApproved: isApproved,
+        adminNote: adminNote,
+      );
+      return const Right(unit);
+    } catch (e) {
+      if (e is ServerException) {
+        return Left(
+          ServerFailure(e.errModel?.errorMessage ?? 'Unknown Server Error'),
+        );
+      } else if (e is DioException) {
+        return Left(ServerFailure(e.message ?? 'Server Error'));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }
 

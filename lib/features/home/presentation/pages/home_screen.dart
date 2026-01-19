@@ -10,6 +10,8 @@ import '../../manager/home_cubit.dart';
 import '../../manager/home_state.dart';
 import '../../data/models/doctor_model.dart';
 import '../../../patients/data/models/patient_model.dart';
+import '../../../../features/patients/manager/patient_detail_cubit.dart';
+import '../../../../features/patients/presentation/pages/patient_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -532,7 +534,21 @@ class _PatientsTable extends StatelessWidget {
                   DataCell(
                     TextButton(
                       onPressed: () {
-                        // Navigate to patient details
+                         Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => sl<PatientDetailCubit>(),
+                              child: PatientDetailsScreen(patient: patient),
+                            ),
+                          ),
+                        ).then((value) {
+                           if (value == true) {
+                             // Refresh list if needed (e.g. status changed, though API is stop only)
+                             // Ideally re-fetch or update local list, but re-fetch is safer.
+                             context.read<HomeCubit>().loadData();
+                           }
+                        });
                       },
                       child: Text(
                         '${patient.id}',

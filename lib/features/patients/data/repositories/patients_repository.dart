@@ -8,5 +8,12 @@ abstract class PatientsRepository {
     required int pageSize,
     String? patientName,
   });
+
+  Future<Either<Failure, Unit>> approveOrDisapprove({
+    required int userId,
+    required int role,
+    required bool isApproved,
+    String? adminNote,
+  });
 }
 
