@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/core/theme/app_colors.dart';
@@ -90,8 +92,30 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class _TopBar extends StatelessWidget {
+class _TopBar extends StatefulWidget {
   const _TopBar();
+
+  @override
+  State<_TopBar> createState() => _TopBarState();
+}
+
+class _TopBarState extends State<_TopBar> {
+  Timer? _debounce;
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged(String query) {
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      context.read<HomeCubit>().search(query);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,6 +123,22 @@ class _TopBar extends StatelessWidget {
       builder: (context, state) {
         // Read currentTab directly from Cubit to persist state across Loading/Error
         HomeTab currentTab = context.read<HomeCubit>().currentTab;
+
+        // Clear search text if tab changed (logic in Cubit resets search query)
+        // Ideally we should sync specific search text per tab or clear it.
+        // Cubit clears searchQuery on tab change, so we might want to clear controller too.
+        // However, listening to state builds helps, but we need to be careful not to loop.
+        // For simplicity, we just keep the controller as is or clear it if needed.
+        // Let's clear it if the Cubit's query is empty and controller is not (e.g. tab switch).
+        if (context.read<HomeCubit>().searchQuery.isEmpty &&
+            _searchController.text.isNotEmpty) {
+          // Use addPostFrameCallback to avoid build collisions or just check logic.
+          // A safer way is to just let the user see the text but maybe the search is reset?
+          // The cubit resets `searchQuery` on tab change.
+          // So, let's clear the text field when tab changes.
+          // Since we are rebuilding, we can check.
+          _searchController.clear();
+        }
 
         return Row(
           children: [
@@ -114,14 +154,18 @@ class _TopBar extends StatelessWidget {
                   _TabButton(
                     title: 'الدكاترة', // Doctors
                     isActive: currentTab == HomeTab.doctors,
-                    onTap: () =>
-                        context.read<HomeCubit>().changeTab(HomeTab.doctors),
+                    onTap: () {
+                      _searchController.clear();
+                      context.read<HomeCubit>().changeTab(HomeTab.doctors);
+                    },
                   ),
                   _TabButton(
                     title: 'المرضى', // Patients
                     isActive: currentTab == HomeTab.patients,
-                    onTap: () =>
-                        context.read<HomeCubit>().changeTab(HomeTab.patients),
+                    onTap: () {
+                      _searchController.clear();
+                      context.read<HomeCubit>().changeTab(HomeTab.patients);
+                    },
                   ),
                 ],
               ),
@@ -131,6 +175,8 @@ class _TopBar extends StatelessWidget {
             SizedBox(
               width: 300,
               child: TextField(
+                controller: _searchController,
+                onChanged: _onSearchChanged,
                 decoration: InputDecoration(
                   hintText: 'بحث', // Search
                   prefixIcon: const Icon(Icons.search),

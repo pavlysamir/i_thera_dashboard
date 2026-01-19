@@ -7,5 +7,6 @@ abstract class HomeRepository {
   Future<Either<Failure, PaginatedResponse<DoctorModel>>> getDoctors({
     required int pageNumber,
     int pageSize = 13,
+    String? doctorName,
   });
 }

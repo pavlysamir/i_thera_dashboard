@@ -13,9 +13,18 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<Either<Failure, PaginatedResponse<DoctorModel>>> getDoctors({required int pageNumber, int pageSize = 13}) async {
+  @override
+  Future<Either<Failure, PaginatedResponse<DoctorModel>>> getDoctors({
+    required int pageNumber,
+    int pageSize = 13,
+    String? doctorName,
+  }) async {
     try {
-      final response = await remoteDataSource.getDoctors(pageNumber: pageNumber, pageSize: pageSize);
+      final response = await remoteDataSource.getDoctors(
+        pageNumber: pageNumber,
+        pageSize: pageSize,
+        doctorName: doctorName,
+      );
       return Right(response);
     } catch (e) {
       if (e is ServerException) {

@@ -10,6 +10,7 @@ abstract class HomeRemoteDataSource {
   Future<PaginatedResponse<DoctorModel>> getDoctors({
     required int pageNumber,
     int pageSize = 10,
+    String? doctorName,
   });
 }
 
@@ -18,11 +19,21 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   Future<PaginatedResponse<DoctorModel>> getDoctors({
     required int pageNumber,
     int pageSize = 13,
+    String? doctorName,
   }) async {
     try {
+      final Map<String, dynamic> queryParams = {
+        'PageNumber': pageNumber,
+        'PageSize': pageSize,
+      };
+
+      if (doctorName != null && doctorName.isNotEmpty) {
+        queryParams['doctorName'] = doctorName;
+      }
+
       final response = await DioHelper.getData(
         url: ApiEndpoints.getAllDoctors,
-        query: {'PageNumber': pageNumber, 'PageSize': pageSize},
+        query: queryParams,
       );
 
       final data = response.data;

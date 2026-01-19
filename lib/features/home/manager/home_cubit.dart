@@ -15,6 +15,7 @@ class HomeCubit extends Cubit<HomeState> {
   int currentPage = 1;
   static const int pageSize = 13;
   HomeTab currentTab = HomeTab.doctors;
+  String searchQuery = '';
 
   Future<void> loadData({int? page}) async {
     if (page != null) {
@@ -26,6 +27,7 @@ class HomeCubit extends Cubit<HomeState> {
       final result = await homeRepository.getDoctors(
         pageNumber: currentPage,
         pageSize: pageSize,
+        doctorName: searchQuery.isEmpty ? null : searchQuery,
       );
 
       result.fold(
@@ -40,6 +42,7 @@ class HomeCubit extends Cubit<HomeState> {
       final result = await patientsRepository.getPatients(
         pageNumber: currentPage,
         pageSize: pageSize,
+        patientName: searchQuery.isEmpty ? null : searchQuery,
       );
 
       result.fold(
@@ -52,10 +55,17 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  void search(String query) {
+    searchQuery = query;
+    currentPage = 1;
+    loadData(page: 1);
+  }
+
   void changeTab(HomeTab tab) {
     if (currentTab != tab) {
       currentTab = tab;
       currentPage = 1; // Reset to page 1 on tab change
+      searchQuery = ''; // Reset search on tab change
       loadData(page: 1);
     }
   }

@@ -15,11 +15,13 @@ class PatientsRepositoryImpl implements PatientsRepository {
   Future<Either<Failure, PatientsResponse>> getPatients({
     required int pageNumber,
     required int pageSize,
+    String? patientName,
   }) async {
     try {
       final response = await remoteDataSource.getPatients(
         pageNumber: pageNumber,
         pageSize: pageSize,
+        patientName: patientName,
       );
       return Right(response);
     } catch (e) {

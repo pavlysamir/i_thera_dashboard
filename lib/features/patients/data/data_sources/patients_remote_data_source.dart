@@ -9,6 +9,7 @@ abstract class PatientsRemoteDataSource {
   Future<PatientsResponse> getPatients({
     required int pageNumber,
     required int pageSize,
+    String? patientName,
   });
 }
 
@@ -17,14 +18,21 @@ class PatientsRemoteDataSourceImpl implements PatientsRemoteDataSource {
   Future<PatientsResponse> getPatients({
     required int pageNumber,
     required int pageSize,
+    String? patientName,
   }) async {
     try {
+      final Map<String, dynamic> queryParams = {
+        'PageNumber': pageNumber,
+        'PageSize': pageSize,
+      };
+
+      if (patientName != null && patientName.isNotEmpty) {
+        queryParams['patientName'] = patientName;
+      }
+
       final response = await DioHelper.getData(
         url: ApiEndpoints.getAllPatients,
-        query: {
-          'PageNumber': pageNumber,
-          'PageSize': pageSize,
-        },
+        query: queryParams,
       );
 
       final data = response.data;

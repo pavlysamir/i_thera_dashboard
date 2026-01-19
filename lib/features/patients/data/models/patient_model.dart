@@ -11,6 +11,8 @@ class PatientModel extends Equatable {
   final String cityName;
   final String? regionName;
   final String createdOn;
+  final int completedBookings;
+  final int cancelledBookings;
 
   const PatientModel({
     required this.id,
@@ -23,6 +25,8 @@ class PatientModel extends Equatable {
     required this.cityName,
     this.regionName,
     required this.createdOn,
+    required this.completedBookings,
+    required this.cancelledBookings,
   });
 
   factory PatientModel.fromJson(Map<String, dynamic> json) {
@@ -37,10 +41,19 @@ class PatientModel extends Equatable {
       cityName: json['cityName'] ?? '',
       regionName: json['regionName'],
       createdOn: json['createdOn'] ?? '',
+      completedBookings: json['completedBookings'],
+      cancelledBookings: json['cancelledBookings'],
     );
   }
 
   @override
-  List<Object?> get props => [id, userName, email, phoneNumber, gender, regionId, regionName];
+  List<Object?> get props => [
+    id,
+    userName,
+    email,
+    phoneNumber,
+    gender,
+    regionId,
+    regionName,
+  ];
 }
-

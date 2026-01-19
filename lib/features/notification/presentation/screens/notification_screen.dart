@@ -1,4 +1,3 @@
-// lib/features/notifications/presentation/notifications_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/core/di/service_locator.dart';

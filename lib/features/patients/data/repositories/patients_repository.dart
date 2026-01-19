@@ -6,6 +6,7 @@ abstract class PatientsRepository {
   Future<Either<Failure, PatientsResponse>> getPatients({
     required int pageNumber,
     required int pageSize,
+    String? patientName,
   });
 }
 
