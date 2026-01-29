@@ -115,8 +115,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) =>
-                    DoctorDetailCubit(notificationsRepository: sl()),
+                create: (context) => DoctorDetailCubit(
+                  notificationsRepository: sl(),
+                  pushNotificationService: sl(),
+                ),
                 child: DoctorDetailScreen(doctorId: notification.doctorId!),
               ),
             ),
@@ -136,8 +138,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider(
-                create: (context) =>
-                    WalletRequestCubit(notificationsRepository: sl()),
+                create: (context) => WalletRequestCubit(
+                  notificationsRepository: sl(),
+                  pushNotificationService: sl(),
+                ),
                 child: WalletRequestScreen(
                   doctorId: notification.doctorId!,
                   walletRequestId: notification.walletRequestId!,

@@ -1,4 +1,3 @@
-// lib/features/notifications/presentation/doctor_detail_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/features/notification/data/models/doctor_details_model.dart';
@@ -102,6 +101,11 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                 backgroundColor: state.isApproved ? Colors.green : Colors.red,
               ),
             );
+            context.read<DoctorDetailCubit>().sendValidationNotification(
+              state.isApproved ? 0 : -1,
+              widget.doctorId,
+              33,
+            );
             Navigator.pop(
               context,
               true,
@@ -193,6 +197,8 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                         // Doctor Info
                         Expanded(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               _buildInfoRow('الأسم', doctorData.userName),
                               const SizedBox(height: 16),
@@ -284,8 +290,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
+                        SizedBox(
+                          width: 150,
                           child: ElevatedButton(
                             onPressed: isLoading
                                 ? null
@@ -319,7 +327,8 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                           ),
                         ),
                         const SizedBox(width: 16),
-                        Expanded(
+                        SizedBox(
+                          width: 150,
                           child: ElevatedButton(
                             onPressed: isLoading
                                 ? null
@@ -383,9 +392,9 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
 
   Widget _buildInfoRow(String label, String value) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
+
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
         Text(
           value,
           style: const TextStyle(
@@ -394,15 +403,16 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
             color: Colors.black87,
           ),
         ),
+        const SizedBox(width: 32),
+        Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
       ],
     );
   }
 
   Widget _buildLinkRow(String label, String linkText, {String? url}) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
         GestureDetector(
           onTap: url != null
               ? () {
@@ -422,6 +432,9 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
             ),
           ),
         ),
+        const SizedBox(width: 32),
+
+        Text(label, style: const TextStyle(fontSize: 14, color: Colors.grey)),
       ],
     );
   }

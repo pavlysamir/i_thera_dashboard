@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:i_thera_dashboard/features/notification/data/data_sources/notification_remote_data_source.dart';
 import 'package:i_thera_dashboard/features/notification/data/repositery/notification_impl_repo.dart';
+import 'package:i_thera_dashboard/features/notification/data/data_sources/push_notification_service.dart';
 import 'package:i_thera_dashboard/features/notification/data/repositery/notification_repo.dart';
 import 'package:i_thera_dashboard/features/notification/managers/cubit/notification_cubit.dart';
 import 'package:i_thera_dashboard/features/notification/managers/doctor_details_cubit/doctor_details_cubit.dart';
@@ -80,6 +81,10 @@ Future<void> init() async {
     () => NotificationsRemoteDataSourceImpl(),
   );
 
+  sl.registerLazySingleton<PushNotificationService>(
+    () => PushNotificationService(),
+  );
+
   // Repositories
   sl.registerLazySingleton<NotificationsRepository>(
     () => NotificationsRepositoryImpl(
@@ -91,18 +96,23 @@ Future<void> init() async {
   sl.registerFactory(
     () => NotificationsCubit(
       notificationsRepository: sl<NotificationsRepository>(),
+      pushNotificationService: sl<PushNotificationService>(),
     ),
   );
 
   sl.registerFactory(
     () => DoctorDetailCubit(
       notificationsRepository: sl<NotificationsRepository>(),
+      pushNotificationService: sl<PushNotificationService>(),
+
     ),
   );
 
   sl.registerFactory(
     () => WalletRequestCubit(
       notificationsRepository: sl<NotificationsRepository>(),
+      pushNotificationService: sl<PushNotificationService>(),
+
     ),
   );
 }

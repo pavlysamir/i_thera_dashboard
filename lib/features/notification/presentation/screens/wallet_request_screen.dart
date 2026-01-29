@@ -63,6 +63,13 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
               ),
             );
           }
+          if (state is WalletRequestReviewSuccess) {
+            context.read<WalletRequestCubit>().sendValidationNotification(
+              state.isApproved ? 1 : 3,
+              widget.doctorId,
+              widget.walletRequestId,
+            );
+          }
         },
         builder: (context, state) {
           if (state is WalletRequestLoading) {

@@ -14,4 +14,5 @@ class ApiEndpoints {
   // So I don't strictly need a constant if I build it dynamically.
   // But AddBalanceToDoctor is: /api/Admin/AddBalanceToDoctor
   static const String addBalanceToDoctor = '/api/Admin/AddBalanceToDoctor';
+  static const String fcmSend = 'https://fcm.googleapis.com/fcm/send';
 }
