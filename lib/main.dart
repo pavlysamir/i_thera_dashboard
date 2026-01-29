@@ -1,6 +1,8 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/core/helpers/simple_bloc_observer.dart';
+import 'package:i_thera_dashboard/firebase_options.dart';
 import 'core/cashe/cache_helper.dart';
 import 'core/di/service_locator.dart' as di;
 import 'core/network/dio_helper.dart';
@@ -9,7 +11,7 @@ import 'features/auth/presentation/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Initialize Networking
   DioHelper.init();
 
