@@ -12,6 +12,7 @@ import '../../data/models/doctor_model.dart';
 import '../../../patients/data/models/patient_model.dart';
 import '../../../../features/patients/manager/patient_detail_cubit.dart';
 import '../../../../features/patients/presentation/pages/patient_details_screen.dart';
+import '../../../../features/doctor_details/presentation/screens/doctor_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -378,7 +379,16 @@ class _DoctorsTable extends StatelessWidget {
                   DataCell(
                     TextButton(
                       onPressed: () {
-                        // Navigate to details
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                DoctorDetailsScreen(doctorId: doctor.id),
+                          ),
+                        ).then((value) {
+                          // Refresh logic if needed
+                          context.read<HomeCubit>().loadData();
+                        });
                       },
                       child: Text(
                         '${doctor.id}',

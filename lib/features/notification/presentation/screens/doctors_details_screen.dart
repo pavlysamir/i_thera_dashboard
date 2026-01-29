@@ -1,5 +1,4 @@
 // lib/features/notifications/presentation/doctor_detail_screen.dart
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/features/notification/data/models/doctor_details_model.dart';
