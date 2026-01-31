@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_thera_dashboard/core/widgets/web_image_display.dart';
 import 'package:i_thera_dashboard/features/notification/data/models/doctor_details_model.dart';
 import 'package:i_thera_dashboard/features/notification/managers/doctor_details_cubit/doctor_details_cubit.dart';
 import 'package:i_thera_dashboard/features/notification/managers/doctor_details_cubit/doctor_details_state.dart';
@@ -271,13 +272,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                             child:
                                 doctorData.hasImage &&
                                     doctorData.displayImage.isNotEmpty
-                                ? Image.network(
-                                    doctorData.displayImage,
+                                ? WebImageDisplay(
+                                    imageUrl: doctorData.displayImage,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      print('Web Image error: $error');
-                                      return _buildDefaultDoctorImage();
-                                    },
+                                    errorWidget: _buildDefaultDoctorImage(),
                                   )
                                 : _buildDefaultDoctorImage(),
                           ),

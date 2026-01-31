@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:i_thera_dashboard/core/widgets/web_image_display.dart';
 import 'package:i_thera_dashboard/features/notification/data/models/doctor_details_model.dart';
 
 class DoctorInfoCard extends StatelessWidget {
@@ -107,11 +108,10 @@ class DoctorInfoCard extends StatelessWidget {
                 height: 300,
                 color: Colors.blue,
                 child: doctor.hasImage
-                    ? Image.network(
-                        doctor.doctorImage ?? '',
+                    ? WebImageDisplay(
+                        imageUrl: doctor.doctorImage ?? '',
                         fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            _buildDefaultAvatar(),
+                        errorWidget: _buildDefaultAvatar(),
                       )
                     : _buildDefaultAvatar(),
               ),

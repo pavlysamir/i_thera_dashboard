@@ -1,6 +1,7 @@
 // lib/features/notifications/presentation/wallet_request_screen.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:i_thera_dashboard/core/widgets/web_image_display.dart';
 import 'package:i_thera_dashboard/features/notification/data/models/wallet_request_model.dart';
 import 'package:i_thera_dashboard/features/notification/managers/wallet_request_cubit/cubit/wallet_request_cubit.dart';
 import 'package:i_thera_dashboard/features/notification/managers/wallet_request_cubit/cubit/wallet_request_state.dart';
@@ -249,14 +250,10 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
                         child:
                             walletRequest.imageURL != null &&
                                 walletRequest.imageURL!.isNotEmpty
-                            ? Image.network(
-                                walletRequest.imageURL!,
-                                height: 600,
-                                width: 400,
+                            ? WebImageDisplay(
+                                imageUrl: walletRequest.imageURL!,
                                 fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return _buildNoImageWidget();
-                                },
+                                errorWidget: _buildNoImageWidget(),
                               )
                             : _buildNoImageWidget(),
                       ),
