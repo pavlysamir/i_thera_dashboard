@@ -15,4 +15,10 @@ class ApiEndpoints {
   // But AddBalanceToDoctor is: /api/Admin/AddBalanceToDoctor
   static const String addBalanceToDoctor = '/api/Admin/AddBalanceToDoctor';
   static const String fcmSend = 'https://fcm.googleapis.com/fcm/send';
+
+  // Regions
+  static const String getAllRegions = '/BaseLookup/GetAllRegions';
+  static const String getAllRegionsPrices = '/BaseLookup/GetAllRegionsPrices';
+  static const String updateRegionPrices = '/api/Admin/UpdateRegionPrices';
+  static const String addRegionPrices = '/api/Admin/AddRegionPrices';
 }

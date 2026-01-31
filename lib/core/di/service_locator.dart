@@ -7,6 +7,8 @@ import 'package:i_thera_dashboard/features/notification/data/repositery/notifica
 import 'package:i_thera_dashboard/features/notification/managers/cubit/notification_cubit.dart';
 import 'package:i_thera_dashboard/features/notification/managers/doctor_details_cubit/doctor_details_cubit.dart';
 import 'package:i_thera_dashboard/features/notification/managers/wallet_request_cubit/cubit/wallet_request_cubit.dart';
+import 'package:i_thera_dashboard/features/regions/data/repo/regions_repo.dart';
+import 'package:i_thera_dashboard/features/regions/manager/regions_cubit.dart';
 import '../../features/auth/data/data_sources/auth_remote_data_source.dart';
 import '../../features/auth/data/repositories/auth_repository.dart';
 import '../../features/auth/data/repositories/auth_repository_impl.dart';
@@ -69,8 +71,7 @@ Future<void> init() async {
     () => PatientsRemoteDataSourceImpl(),
   );
 
-  sl.registerFactory(
-      () => PatientDetailCubit(patientsRepository: sl()));
+  sl.registerFactory(() => PatientDetailCubit(patientsRepository: sl()));
 
   // Core
   sl.registerLazySingleton<Dio>(
@@ -104,15 +105,16 @@ Future<void> init() async {
     () => DoctorDetailCubit(
       notificationsRepository: sl<NotificationsRepository>(),
       pushNotificationService: sl<PushNotificationService>(),
-
     ),
   );
 
-  sl.registerFactory(
-    () => WalletRequestCubit(
-      notificationsRepository: sl<NotificationsRepository>(),
-      pushNotificationService: sl<PushNotificationService>(),
-
-    ),
+  () => WalletRequestCubit(
+    notificationsRepository: sl<NotificationsRepository>(),
+    pushNotificationService: sl<PushNotificationService>(),
   );
+
+  // Features - Regions
+  sl.registerLazySingleton<RegionsRepository>(() => RegionsRepository());
+
+  sl.registerFactory(() => RegionsCubit(sl()));
 }

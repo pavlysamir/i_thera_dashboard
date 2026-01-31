@@ -11,7 +11,9 @@ import '../../data/models/doctor_model.dart';
 import '../../../patients/data/models/patient_model.dart';
 import '../../../../features/patients/manager/patient_detail_cubit.dart';
 import '../../../../features/patients/presentation/pages/patient_details_screen.dart';
+import '../../../../features/patients/presentation/pages/patient_details_screen.dart';
 import '../../../../features/doctor_details/presentation/screens/doctor_details_screen.dart';
+import '../../../../features/regions/presentation/pages/regions_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -221,7 +223,17 @@ class _TopBarState extends State<_TopBar> {
             const SizedBox(width: 8),
             CircleAvatar(
               backgroundColor: Colors.white,
-              child: Icon(Icons.settings, color: Colors.blue),
+              child: IconButton(
+                icon: const Icon(Icons.location_on_outlined, color: Colors.blue),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const RegionsScreen(),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         );
@@ -543,7 +555,7 @@ class _PatientsTable extends StatelessWidget {
                   DataCell(
                     TextButton(
                       onPressed: () {
-                         Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => BlocProvider(
@@ -552,11 +564,11 @@ class _PatientsTable extends StatelessWidget {
                             ),
                           ),
                         ).then((value) {
-                           if (value == true) {
-                             // Refresh list if needed (e.g. status changed, though API is stop only)
-                             // Ideally re-fetch or update local list, but re-fetch is safer.
-                             context.read<HomeCubit>().loadData();
-                           }
+                          if (value == true) {
+                            // Refresh list if needed (e.g. status changed, though API is stop only)
+                            // Ideally re-fetch or update local list, but re-fetch is safer.
+                            context.read<HomeCubit>().loadData();
+                          }
                         });
                       },
                       child: Text(
