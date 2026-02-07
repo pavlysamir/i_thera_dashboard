@@ -9,11 +9,13 @@ import 'package:i_thera_dashboard/features/notification/managers/wallet_request_
 class WalletRequestScreen extends StatefulWidget {
   final int doctorId;
   final int walletRequestId;
+  final int notificationType;
 
   const WalletRequestScreen({
     super.key,
     required this.doctorId,
     required this.walletRequestId,
+    required this.notificationType,
   });
 
   @override
@@ -45,6 +47,11 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
       body: BlocConsumer<WalletRequestCubit, WalletRequestState>(
         listener: (context, state) {
           if (state is WalletRequestReviewSuccess) {
+            context.read<WalletRequestCubit>().sendValidationNotification(
+              widget.notificationType,
+              widget.doctorId,
+              widget.walletRequestId,
+            );
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(
@@ -62,13 +69,6 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
                 content: Text(state.message),
                 backgroundColor: Colors.red,
               ),
-            );
-          }
-          if (state is WalletRequestReviewSuccess) {
-            context.read<WalletRequestCubit>().sendValidationNotification(
-              state.isApproved ? 1 : 3,
-              widget.doctorId,
-              widget.walletRequestId,
             );
           }
         },
@@ -271,7 +271,7 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
   }
 
   Widget _buildNoImageWidget() {
-    return Container(
+    return SizedBox(
       height: 600,
       child: const Center(
         child: Column(

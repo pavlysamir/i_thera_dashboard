@@ -2,7 +2,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/features/notification/data/repositery/notification_repo.dart';
 import 'package:i_thera_dashboard/features/notification/data/data_sources/push_notification_service.dart';
-import 'package:i_thera_dashboard/features/notification/data/models/notification_model.dart';
 import 'package:i_thera_dashboard/features/notification/managers/cubit/notification_state.dart';
 
 class NotificationsCubit extends Cubit<NotificationsState> {

@@ -145,6 +145,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 child: WalletRequestScreen(
                   doctorId: notification.doctorId!,
                   walletRequestId: notification.walletRequestId!,
+                  notificationType: notification.type,
                 ),
               ),
             ),

@@ -46,10 +46,9 @@ class WalletRequestCubit extends Cubit<WalletRequestState> {
       adminNote: adminNote,
     );
 
-    result.fold(
-      (failure) => emit(WalletRequestError(failure.message)),
-      (_) => emit(WalletRequestReviewSuccess(isApproved: isApproved)),
-    );
+    result.fold((failure) => emit(WalletRequestError(failure.message)), (_) {
+      emit(WalletRequestReviewSuccess(isApproved: isApproved));
+    });
   }
 
   Future<void> sendValidationNotification(

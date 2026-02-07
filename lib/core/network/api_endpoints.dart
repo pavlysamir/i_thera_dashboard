@@ -21,4 +21,5 @@ class ApiEndpoints {
   static const String getAllRegionsPrices = '/BaseLookup/GetAllRegionsPrices';
   static const String updateRegionPrices = '/api/Admin/UpdateRegionPrices';
   static const String addRegionPrices = '/api/Admin/AddRegionPrices';
+  static const String sendNotificationAsync = '/api/Auth/SendNotificationAsync';
 }

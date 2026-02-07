@@ -1,15 +1,10 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dio/dio.dart';
 import 'package:i_thera_dashboard/core/network/api_endpoints.dart';
+import 'package:i_thera_dashboard/core/network/dio_helper.dart';
 
 class PushNotificationService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final Dio _dio = Dio();
-
-  // TODO: Replace with your actual FCM Server Key from Firebase Console -> Project Settings -> Cloud Messaging
-  static const String _serverKey = 'YOUR_FCM_SERVER_KEY_HERE';
 
   Future<void> sendNotificationToDoctor(
     int? notificationType,
@@ -23,7 +18,7 @@ class PushNotificationService {
       }
 
       // 1. Get FCM Token from Firestore
-      final String? fcmToken = await _getDoctorFcmToken(doctorId!);
+      final String? fcmToken = await _getDoctorFcmToken(doctorId);
 
       if (fcmToken == null || fcmToken.isEmpty) {
         log('Error: FCM token not found for doctor $doctorId');
@@ -56,16 +51,11 @@ class PushNotificationService {
           break;
       }
 
-      // 3. Send FCM Notification
-      await _sendFcmMessage(
+      // 3. Send Notification using new API
+      await _sendNotificationUsingApi(
         token: fcmToken,
         title: title,
         body: body,
-        data: {
-          'type': notificationType.toString(),
-          'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-          'id': notificationId.toString(),
-        },
       );
 
       log('Notification sent successfully to token: $fcmToken');
@@ -96,39 +86,28 @@ class PushNotificationService {
     }
   }
 
-  Future<void> _sendFcmMessage({
+  Future<void> _sendNotificationUsingApi({
     required String token,
     required String title,
     required String body,
-    required Map<String, dynamic> data,
   }) async {
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'key=$_serverKey',
-    };
-
-    final payload = {
-      'to': token,
-      'notification': {'title': title, 'body': body, 'sound': 'default'},
-      'data': data,
-    };
+    final payload = {"title": title, "body": body, "deviceToken": token};
 
     try {
-      final response = await _dio.post(
-        ApiEndpoints.fcmSend,
-        options: Options(headers: headers),
-        data: jsonEncode(payload),
+      final response = await DioHelper.postData(
+        url: ApiEndpoints.sendNotificationAsync,
+        data: payload,
       );
 
       if (response.statusCode == 200) {
-        log('FCM response: ${response.data}');
+        log('Notification API response: ${response.data}');
       } else {
         log(
-          'FCM call failed: ${response.statusCode} - ${response.statusMessage}',
+          'Notification API call failed: ${response.statusCode} - ${response.statusMessage}',
         );
       }
     } catch (e) {
-      log('Dio error calling FCM: $e');
+      log('Error calling Notification API: $e');
       rethrow;
     }
   }
