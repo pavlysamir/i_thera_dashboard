@@ -36,7 +36,8 @@ class PushNotificationService {
           break;
         case 0: // Request for doctor join
           title = 'تحديث طلب الانضمام';
-          body = 'تم قبول طلبك للانضمام بنجاح🎉';
+          body =
+              '\nالآن يمكنك تسجيل الدخول فى اى وقت ☺️\nتم قبول طلبك للأنضمام بنجاح ✅';
           break;
         case 1: // Add money
           title = 'تحديث المحفظة';
