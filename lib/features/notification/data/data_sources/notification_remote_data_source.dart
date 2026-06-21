@@ -14,7 +14,7 @@ abstract class NotificationsRemoteDataSource {
   Future<void> approveOrDisapprove({
     required int userId,
     required int role,
-    required bool isApproved,
+    required int isApproved,
     String? adminNote,
   });
   Future<void> reviewWalletRequest({
@@ -95,7 +95,7 @@ class NotificationsRemoteDataSourceImpl
   Future<void> approveOrDisapprove({
     required int userId,
     required int role,
-    required bool isApproved,
+    required int isApproved,
     String? adminNote,
   }) async {
     try {

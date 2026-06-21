@@ -7,21 +7,21 @@ import '../models/notification_model.dart';
 
 abstract class NotificationsRepository {
   Future<Either<Failure, List<NotificationModel>>> getNotifications();
-    Future<Either<Failure, DoctorDetailModel>> getDoctorById(int doctorId);
+  Future<Either<Failure, DoctorDetailModel>> getDoctorById(int doctorId);
   Future<Either<Failure, Unit>> approveOrDisapprove({
     required int userId,
     required int role,
-    required bool isApproved,
+    required int isApproved,
     String? adminNote,
   });
-   Future<Either<Failure, Unit>> reviewWalletRequest({
+  Future<Either<Failure, Unit>> reviewWalletRequest({
     required int requestId,
     required bool isApproved,
     required int requestType,
     String? adminNote,
   });
 
-   Future<Either<Failure, WalletRequestModel>> getWalletRequestDetails({
+  Future<Either<Failure, WalletRequestModel>> getWalletRequestDetails({
     required int doctorId,
     required int walletRequestId,
   });

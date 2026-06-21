@@ -52,7 +52,7 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
   Future<Either<Failure, Unit>> approveOrDisapprove({
     required int userId,
     required int role,
-    required bool isApproved,
+    required int isApproved,
     String? adminNote,
   }) async {
     try {
