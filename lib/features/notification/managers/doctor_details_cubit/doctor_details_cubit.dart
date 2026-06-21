@@ -46,7 +46,7 @@ class DoctorDetailCubit extends Cubit<DoctorDetailState> {
     final result = await notificationsRepository.approveOrDisapprove(
       userId: userId,
       role: 1, // 1 for doctor
-      isApproved: 0,
+      isApproved: 2,
       adminNote: note,
     );
 
