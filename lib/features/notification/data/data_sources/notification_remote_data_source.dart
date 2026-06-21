@@ -17,14 +17,14 @@ abstract class NotificationsRemoteDataSource {
     required bool isApproved,
     String? adminNote,
   });
-    Future<void> reviewWalletRequest({
+  Future<void> reviewWalletRequest({
     required int requestId,
     required bool isApproved,
     required int requestType,
     String? adminNote,
   });
 
-    Future<WalletRequestModel> getWalletRequestDetails({
+  Future<WalletRequestModel> getWalletRequestDetails({
     required int doctorId,
     required int walletRequestId,
   });
@@ -104,7 +104,7 @@ class NotificationsRemoteDataSourceImpl
         data: {
           'userId': userId,
           'role': role,
-          'isApproved': isApproved,
+          'approvalStatus': isApproved,
           'adminNote': adminNote ?? '',
         },
       );
@@ -135,8 +135,7 @@ class NotificationsRemoteDataSourceImpl
     }
   }
 
-
-    @override
+  @override
   Future<void> reviewWalletRequest({
     required int requestId,
     required bool isApproved,
@@ -180,8 +179,7 @@ class NotificationsRemoteDataSourceImpl
     }
   }
 
-
-   @override
+  @override
   Future<WalletRequestModel> getWalletRequestDetails({
     required int doctorId,
     required int walletRequestId,
@@ -226,6 +224,3 @@ class NotificationsRemoteDataSourceImpl
     }
   }
 }
-
-
-
