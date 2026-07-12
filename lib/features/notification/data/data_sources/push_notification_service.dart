@@ -9,8 +9,9 @@ class PushNotificationService {
   Future<void> sendNotificationToDoctor(
     int? notificationType,
     int? doctorId,
-    int? notificationId,
-  ) async {
+    int? notificationId, {
+    int? approvalStatus,
+  }) async {
     try {
       if (doctorId == null) {
         log('Error: Doctor ID is null in notification');
@@ -57,6 +58,7 @@ class PushNotificationService {
         token: fcmToken,
         title: title,
         body: body,
+        approvalStatus: approvalStatus,
       );
 
       log('Notification sent successfully to token: $fcmToken');
@@ -91,8 +93,14 @@ class PushNotificationService {
     required String token,
     required String title,
     required String body,
+    int? approvalStatus,
   }) async {
-    final payload = {"title": title, "body": body, "deviceToken": token};
+    final payload = {
+      "title": title,
+      "body": body,
+      "deviceToken": token,
+      "approvalStatus":? approvalStatus,
+    };
 
     try {
       final response = await DioHelper.postData(

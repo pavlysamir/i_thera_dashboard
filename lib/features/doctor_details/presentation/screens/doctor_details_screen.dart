@@ -8,6 +8,8 @@ import 'package:i_thera_dashboard/features/doctor_details/presentation/widgets/d
 import 'package:i_thera_dashboard/features/doctor_details/presentation/widgets/suspension_section.dart';
 import 'package:i_thera_dashboard/features/doctor_details/presentation/widgets/financial_account_section.dart';
 import 'package:i_thera_dashboard/features/doctor_details/presentation/widgets/wallet_section.dart';
+import 'package:i_thera_dashboard/core/di/service_locator.dart';
+import 'package:i_thera_dashboard/features/notification/data/data_sources/push_notification_service.dart';
 
 class DoctorDetailsScreen extends StatelessWidget {
   final int doctorId;
@@ -56,6 +58,12 @@ class DoctorDetailsScreen extends StatelessWidget {
                   ),
                   backgroundColor: Colors.green,
                 ),
+              );
+              sl<PushNotificationService>().sendNotificationToDoctor(
+                state.isApproved ? 0 : -1,
+                doctorId,
+                33,
+                approvalStatus: state.isApproved ? 1 : 2,
               );
             } else if (state is DoctorDetailsActionError) {
               ScaffoldMessenger.of(context).showSnackBar(
