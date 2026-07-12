@@ -59,14 +59,16 @@ class DoctorDetailCubit extends Cubit<DoctorDetailState> {
   Future<void> sendValidationNotification(
     int? notificationType,
     int? doctorId,
-    int? notificationId,
-  ) async {
+    int? notificationId, {
+    int? approvalStatus,
+  }) async {
     // We don't necessarily need to emit state changes here unless we want to show loading/success for the push
     // For now, we just fire and forget, or log.
     await pushNotificationService.sendNotificationToDoctor(
       notificationType,
       doctorId,
       notificationId,
+      approvalStatus: approvalStatus,
     );
   }
 }

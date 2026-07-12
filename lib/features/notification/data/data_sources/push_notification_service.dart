@@ -99,7 +99,7 @@ class PushNotificationService {
       "title": title,
       "body": body,
       "deviceToken": token,
-      "approvalStatus":? approvalStatus,
+      "approvalStatus": approvalStatus,
     };
 
     try {

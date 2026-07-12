@@ -106,6 +106,7 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
               state.isApproved ? 0 : -1,
               widget.doctorId,
               33,
+              approvalStatus: state.isApproved ? 1 : 2,
             );
             Navigator.pop(
               context,
@@ -152,10 +153,6 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
           }
 
           if (state is DoctorDetailLoaded || state is DoctorApprovalLoading) {
-            final doctor = state is DoctorDetailLoaded
-                ? state.doctor
-                : (state as DoctorApprovalLoading);
-
             // Get doctor from the previous state if in loading
             DoctorDetailModel? doctorData;
             if (state is DoctorDetailLoaded) {
