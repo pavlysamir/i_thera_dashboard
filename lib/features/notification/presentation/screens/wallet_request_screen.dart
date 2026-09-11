@@ -10,12 +10,16 @@ class WalletRequestScreen extends StatefulWidget {
   final int doctorId;
   final int walletRequestId;
   final int notificationType;
+  final int? approvalStatus;
+  final int? notificationId;
 
   const WalletRequestScreen({
     super.key,
     required this.doctorId,
     required this.walletRequestId,
     required this.notificationType,
+    this.approvalStatus,
+    this.notificationId,
   });
 
   @override
@@ -29,6 +33,7 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
     context.read<WalletRequestCubit>().loadWalletRequestDetails(
       doctorId: widget.doctorId,
       walletRequestId: widget.walletRequestId,
+      notificationId: widget.notificationId,
     );
   }
 
@@ -180,48 +185,54 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
                             const SizedBox(height: 40),
                             SizedBox(
                               width: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () {
-                                        context
-                                            .read<WalletRequestCubit>()
-                                            .reviewWalletRequest(
-                                              requestId: walletRequest!.id,
-                                              isApproved: true,
-                                              requestType:
-                                                  walletRequest.requestType,
-                                            );
-                                      },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF1E88E5),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                              child: AbsorbPointer(
+                                absorbing: isLoading || widget.approvalStatus != null,
+                                child: Opacity(
+                                  opacity: widget.approvalStatus != null ? 0.4 : 1.0,
+                                  child: ElevatedButton(
+                                    onPressed: (isLoading || widget.approvalStatus != null)
+                                        ? null
+                                        : () {
+                                            context
+                                                .read<WalletRequestCubit>()
+                                                .reviewWalletRequest(
+                                                  requestId: walletRequest!.id,
+                                                  isApproved: true,
+                                                  requestType:
+                                                      walletRequest.requestType,
+                                                );
+                                          },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF1E88E5),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 16,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                    ),
+                                    child: isLoading
+                                        ? const SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                    Colors.white,
+                                                  ),
+                                            ),
+                                          )
+                                        : const Text(
+                                            'اضافة رصيد',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
+                                          ),
                                   ),
                                 ),
-                                child: isLoading
-                                    ? const SizedBox(
-                                        height: 20,
-                                        width: 20,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                                Colors.white,
-                                              ),
-                                        ),
-                                      )
-                                    : const Text(
-                                        'اضافة رصيد',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                        ),
-                                      ),
                               ),
                             ),
                           ],

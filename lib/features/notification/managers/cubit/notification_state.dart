@@ -39,3 +39,22 @@ class NotificationMarkedAsRead extends NotificationsState {
   @override
   List<Object?> get props => [notificationId];
 }
+
+class NotificationsUnseenCountLoaded extends NotificationsState {
+  final int count;
+
+  const NotificationsUnseenCountLoaded(this.count);
+
+  @override
+  List<Object?> get props => [count];
+}
+
+class NotificationMarkedAsWatched extends NotificationsState {
+  final int notificationId;
+
+  const NotificationMarkedAsWatched(this.notificationId);
+
+  @override
+  List<Object?> get props => [notificationId];
+}
+

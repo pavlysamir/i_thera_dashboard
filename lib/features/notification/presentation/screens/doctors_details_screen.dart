@@ -7,8 +7,15 @@ import 'package:i_thera_dashboard/features/notification/managers/doctor_details_
 
 class DoctorDetailScreen extends StatefulWidget {
   final int doctorId;
+  final int? approvalStatus;
+  final int? notificationId;
 
-  const DoctorDetailScreen({super.key, required this.doctorId});
+  const DoctorDetailScreen({
+    super.key,
+    required this.doctorId,
+    this.approvalStatus,
+    this.notificationId,
+  });
 
   @override
   State<DoctorDetailScreen> createState() => _DoctorDetailScreenState();
@@ -20,7 +27,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<DoctorDetailCubit>().loadDoctorDetails(widget.doctorId);
+    context.read<DoctorDetailCubit>().loadDoctorDetails(
+      widget.doctorId,
+      notificationId: widget.notificationId,
+    );
   }
 
   @override
@@ -284,83 +294,89 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                   // Action Buttons
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                            onPressed: isLoading
-                                ? null
-                                : () => _showDisapproveDialog(doctorData!),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                    child: AbsorbPointer(
+                      absorbing: isLoading || widget.approvalStatus != null,
+                      child: Opacity(
+                        opacity: widget.approvalStatus != null ? 0.4 : 1.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 150,
+                              child: ElevatedButton(
+                                onPressed: (isLoading || widget.approvalStatus != null)
+                                    ? null
+                                    : () => _showDisapproveDialog(doctorData!),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'رفض',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ),
-                            child: isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : const Text(
-                                    'رفض',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                            const SizedBox(width: 16),
+                            SizedBox(
+                              width: 150,
+                              child: ElevatedButton(
+                                onPressed: (isLoading || widget.approvalStatus != null)
+                                    ? null
+                                    : () {
+                                        context
+                                            .read<DoctorDetailCubit>()
+                                            .approveDoctor(doctorData!.id);
+                                      },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF1E88E5),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        SizedBox(
-                          width: 150,
-                          child: ElevatedButton(
-                            onPressed: isLoading
-                                ? null
-                                : () {
-                                    context
-                                        .read<DoctorDetailCubit>()
-                                        .approveDoctor(doctorData!.id);
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1E88E5),
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor: AlwaysStoppedAnimation<Color>(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'قبول',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
                               ),
                             ),
-                            child: isLoading
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        Colors.white,
-                                      ),
-                                    ),
-                                  )
-                                : const Text(
-                                    'قبول',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                          ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),

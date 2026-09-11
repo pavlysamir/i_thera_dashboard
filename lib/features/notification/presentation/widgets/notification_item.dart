@@ -55,7 +55,7 @@ class NotificationItem extends StatelessWidget {
                         textAlign: TextAlign.right,
                       ),
                     ),
-                    if (!notification.forAdmin)
+                    if (notification.isWatched == false)
                       Container(
                         width: 8,
                         height: 8,

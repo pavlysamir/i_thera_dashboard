@@ -5,8 +5,13 @@ import 'package:i_thera_dashboard/features/notification/data/models/doctor_detai
 /// Widget for the Suspension (الوقف) section
 class SuspensionSection extends StatefulWidget {
   final DoctorDetailModel doctor;
+  final int? approvalStatus;
 
-  const SuspensionSection({super.key, required this.doctor});
+  const SuspensionSection({
+    super.key,
+    required this.doctor,
+    this.approvalStatus,
+  });
 
   @override
   State<SuspensionSection> createState() => _SuspensionSectionState();
@@ -57,33 +62,41 @@ class _SuspensionSectionState extends State<SuspensionSection> {
               ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: widget.doctor.isApproved
-                      ? Colors.red
-                      : Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                onPressed: () {
-                  final isApproving = !widget.doctor.isApproved;
-                  DoctorDetailsCubit.get(context).approveOrDisapprove(
-                    doctorId: widget.doctor.id,
-                    userId: widget.doctor.id,
-                    role: 1,
-                    isApproved: isApproving,
-                  );
-                },
-                child: Text(
-                  widget.doctor.isApproved ? 'وقف' : 'تفعيل',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+            AbsorbPointer(
+              absorbing: widget.approvalStatus != null,
+              child: Opacity(
+                opacity: widget.approvalStatus != null ? 0.4 : 1.0,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.doctor.isApproved
+                          ? Colors.red
+                          : Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: widget.approvalStatus != null
+                        ? null
+                        : () {
+                            final isApproving = !widget.doctor.isApproved;
+                            DoctorDetailsCubit.get(context).approveOrDisapprove(
+                              doctorId: widget.doctor.id,
+                              userId: widget.doctor.id,
+                              role: 1,
+                              isApproved: isApproving,
+                            );
+                          },
+                    child: Text(
+                      widget.doctor.isApproved ? 'وقف' : 'تفعيل',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),

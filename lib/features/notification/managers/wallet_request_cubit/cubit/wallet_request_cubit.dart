@@ -16,6 +16,7 @@ class WalletRequestCubit extends Cubit<WalletRequestState> {
   Future<void> loadWalletRequestDetails({
     required int doctorId,
     required int walletRequestId,
+    int? notificationId,
   }) async {
     emit(WalletRequestLoading());
 
@@ -25,9 +26,15 @@ class WalletRequestCubit extends Cubit<WalletRequestState> {
     );
 
     result.fold(
-      (failure) => emit(WalletRequestError(failure.message)),
-      (walletRequest) =>
-          emit(WalletRequestLoaded(walletRequest: walletRequest)),
+      (failure) {
+        if (!isClosed) emit(WalletRequestError(failure.message));
+      },
+      (walletRequest) {
+        if (!isClosed) emit(WalletRequestLoaded(walletRequest: walletRequest));
+        if (notificationId != null) {
+          notificationsRepository.markAsWatched(notificationId: notificationId);
+        }
+      },
     );
   }
 

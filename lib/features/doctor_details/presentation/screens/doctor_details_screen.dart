@@ -13,8 +13,13 @@ import 'package:i_thera_dashboard/features/notification/data/data_sources/push_n
 
 class DoctorDetailsScreen extends StatelessWidget {
   final int doctorId;
+  final int? approvalStatus;
 
-  const DoctorDetailsScreen({super.key, required this.doctorId});
+  const DoctorDetailsScreen({
+    super.key,
+    required this.doctorId,
+    this.approvalStatus,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +100,10 @@ class DoctorDetailsScreen extends StatelessWidget {
                         // Left column - Suspension
                         Expanded(
                           flex: 1,
-                          child: SuspensionSection(doctor: state.doctor),
+                          child: SuspensionSection(
+                            doctor: state.doctor,
+                            approvalStatus: approvalStatus,
+                          ),
                         ),
                         const SizedBox(width: 16),
                         // Middle column - Financial Account

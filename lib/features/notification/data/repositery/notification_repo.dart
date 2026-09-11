@@ -25,4 +25,7 @@ abstract class NotificationsRepository {
     required int doctorId,
     required int walletRequestId,
   });
+
+  Future<Either<Failure, Unit>> markAsWatched({required int notificationId});
+  Future<Either<Failure, int>> getUnseenCount();
 }

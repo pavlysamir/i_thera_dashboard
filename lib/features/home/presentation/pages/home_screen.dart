@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:i_thera_dashboard/core/theme/app_colors.dart';
-import 'package:i_thera_dashboard/features/notification/managers/cubit/notification_cubit.dart';
-import 'package:i_thera_dashboard/features/notification/presentation/screens/notification_screen.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../manager/home_cubit.dart';
 import '../../manager/home_state.dart';
@@ -11,8 +9,8 @@ import '../../data/models/doctor_model.dart';
 import '../../../patients/data/models/patient_model.dart';
 import '../../../../features/patients/manager/patient_detail_cubit.dart';
 import '../../../../features/patients/presentation/pages/patient_details_screen.dart';
-import '../../../../features/patients/presentation/pages/patient_details_screen.dart';
 import '../../../../features/doctor_details/presentation/screens/doctor_details_screen.dart';
+import '../../../../features/notification/presentation/widgets/notification_badge_icon.dart';
 import '../../../../features/regions/presentation/pages/regions_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -203,23 +201,7 @@ class _TopBarState extends State<_TopBar> {
             ),
             const SizedBox(width: 16),
             // Header Icons (Notification / Settings)
-            CircleAvatar(
-              backgroundColor: Colors.white,
-              child: IconButton(
-                icon: Icon(Icons.notifications_none, color: Colors.blue),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BlocProvider(
-                        create: (context) => sl<NotificationsCubit>(),
-                        child: const NotificationsScreen(),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            const NotificationBadgeIcon(),
             const SizedBox(width: 8),
             CircleAvatar(
               backgroundColor: Colors.white,

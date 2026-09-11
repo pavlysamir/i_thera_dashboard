@@ -125,4 +125,40 @@ class NotificationsRepositoryImpl implements NotificationsRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Unit>> markAsWatched({
+    required int notificationId,
+  }) async {
+    try {
+      await remoteDataSource.markAsWatched(notificationId: notificationId);
+      return const Right(unit);
+    } catch (e) {
+      if (e is ServerException) {
+        return Left(
+          ServerFailure(e.errModel?.errorMessage ?? 'Unknown Server Error'),
+        );
+      } else if (e is DioException) {
+        return Left(ServerFailure(e.message ?? 'Server Error'));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, int>> getUnseenCount() async {
+    try {
+      final count = await remoteDataSource.getUnseenCount();
+      return Right(count);
+    } catch (e) {
+      if (e is ServerException) {
+        return Left(
+          ServerFailure(e.errModel?.errorMessage ?? 'Unknown Server Error'),
+        );
+      } else if (e is DioException) {
+        return Left(ServerFailure(e.message ?? 'Server Error'));
+      }
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

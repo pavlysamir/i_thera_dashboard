@@ -13,14 +13,21 @@ class DoctorDetailCubit extends Cubit<DoctorDetailState> {
     required this.pushNotificationService,
   }) : super(DoctorDetailInitial());
 
-  Future<void> loadDoctorDetails(int doctorId) async {
+  Future<void> loadDoctorDetails(int doctorId, {int? notificationId}) async {
     emit(DoctorDetailLoading());
 
     final result = await notificationsRepository.getDoctorById(doctorId);
 
     result.fold(
-      (failure) => emit(DoctorDetailError(failure.message)),
-      (doctor) => emit(DoctorDetailLoaded(doctor: doctor)),
+      (failure) {
+        if (!isClosed) emit(DoctorDetailError(failure.message));
+      },
+      (doctor) {
+        if (!isClosed) emit(DoctorDetailLoaded(doctor: doctor));
+        if (notificationId != null) {
+          notificationsRepository.markAsWatched(notificationId: notificationId);
+        }
+      },
     );
   }
 

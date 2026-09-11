@@ -108,9 +108,11 @@ Future<void> init() async {
     ),
   );
 
-  () => WalletRequestCubit(
-    notificationsRepository: sl<NotificationsRepository>(),
-    pushNotificationService: sl<PushNotificationService>(),
+  sl.registerFactory(
+    () => WalletRequestCubit(
+      notificationsRepository: sl<NotificationsRepository>(),
+      pushNotificationService: sl<PushNotificationService>(),
+    ),
   );
 
   // Features - Regions

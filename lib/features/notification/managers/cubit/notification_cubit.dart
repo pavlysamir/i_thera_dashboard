@@ -8,6 +8,8 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   final NotificationsRepository notificationsRepository;
   final PushNotificationService pushNotificationService;
 
+  int unseenCount = 0;
+
   NotificationsCubit({
     required this.notificationsRepository,
     required this.pushNotificationService,
@@ -19,9 +21,43 @@ class NotificationsCubit extends Cubit<NotificationsState> {
     final result = await notificationsRepository.getNotifications();
 
     result.fold(
-      (failure) => emit(NotificationsError(failure.message)),
-      (notifications) =>
-          emit(NotificationsLoaded(notifications: notifications)),
+      (failure) {
+        if (!isClosed) emit(NotificationsError(failure.message));
+      },
+      (notifications) {
+        if (!isClosed) emit(NotificationsLoaded(notifications: notifications));
+      },
+    );
+  }
+
+  Future<void> getUnseenCount() async {
+    final result = await notificationsRepository.getUnseenCount();
+    result.fold(
+      (failure) {},
+      (count) {
+        unseenCount = count;
+        if (!isClosed) {
+          emit(NotificationsUnseenCountLoaded(count));
+        }
+      },
+    );
+  }
+
+  Future<void> markNotificationAsWatched(int notificationId) async {
+    final result = await notificationsRepository.markAsWatched(
+      notificationId: notificationId,
+    );
+
+    result.fold(
+      (failure) {},
+      (_) {
+        if (unseenCount > 0) {
+          unseenCount--;
+        }
+        if (!isClosed) {
+          emit(NotificationMarkedAsWatched(notificationId));
+        }
+      },
     );
   }
 

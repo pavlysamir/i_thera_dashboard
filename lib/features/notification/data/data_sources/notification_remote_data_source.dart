@@ -28,6 +28,9 @@ abstract class NotificationsRemoteDataSource {
     required int doctorId,
     required int walletRequestId,
   });
+
+  Future<void> markAsWatched({required int notificationId});
+  Future<int> getUnseenCount();
 }
 
 class NotificationsRemoteDataSourceImpl
@@ -218,6 +221,58 @@ class NotificationsRemoteDataSourceImpl
           errModel: ErrorModel(errorMessage: 'Invalid Response'),
         );
       }
+    } on DioException catch (e) {
+      handleDioExceptions(e);
+      throw ServerException(errModel: ErrorModel.fromJson(e.response?.data));
+    }
+  }
+
+  @override
+  Future<void> markAsWatched({required int notificationId}) async {
+    try {
+      final response = await DioHelper.postData(
+        url: ApiEndpoints.markNotificationAsWatched,
+        query: {'notificationId': notificationId},
+        data: {},
+      );
+
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        final isSuccess = data['isSuccess'] == true || data['success'] == true;
+        if (!isSuccess && (data.containsKey('isSuccess') || data.containsKey('success'))) {
+          throw ServerException(errModel: ErrorModel.fromJson(data));
+        }
+      }
+    } on DioException catch (e) {
+      handleDioExceptions(e);
+      throw ServerException(errModel: ErrorModel.fromJson(e.response?.data));
+    }
+  }
+
+  @override
+  Future<int> getUnseenCount() async {
+    try {
+      final response = await DioHelper.getData(
+        url: ApiEndpoints.unseenNotificationCount,
+      );
+
+      final data = response.data;
+      if (data is Map<String, dynamic>) {
+        if (data['isSuccess'] == true || data['success'] == true || !data.containsKey('isSuccess')) {
+          final res = data['responseData'] ?? data['data'] ?? data['count'];
+          if (res is int) return res;
+          if (res is num) return res.toInt();
+          if (res is String) return int.tryParse(res) ?? 0;
+          return 0;
+        } else {
+          throw ServerException(errModel: ErrorModel.fromJson(data));
+        }
+      } else if (data is int) {
+        return data;
+      } else if (data is num) {
+        return data.toInt();
+      }
+      return 0;
     } on DioException catch (e) {
       handleDioExceptions(e);
       throw ServerException(errModel: ErrorModel.fromJson(e.response?.data));

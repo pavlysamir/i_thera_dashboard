@@ -12,6 +12,8 @@ class NotificationModel extends Equatable {
   final int? walletRequestId;
   final String? walletImageRequestPath;
   final int type;
+  final bool? isWatched;
+  final int? approvalStatus;
 
   const NotificationModel({
     required this.id,
@@ -24,6 +26,8 @@ class NotificationModel extends Equatable {
     this.walletRequestId,
     this.walletImageRequestPath,
     required this.type,
+    this.isWatched,
+    this.approvalStatus,
   });
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
@@ -38,6 +42,8 @@ class NotificationModel extends Equatable {
       walletRequestId: json['walletRequestId'],
       walletImageRequestPath: json['walletImageRequestPath'],
       type: json['type'] ?? 0,
+      isWatched: json['isWatched'] as bool?,
+      approvalStatus: json['approvalStatus'] as int?,
     );
   }
 
@@ -53,6 +59,8 @@ class NotificationModel extends Equatable {
       'walletRequestId': walletRequestId,
       'walletImageRequestPath': walletImageRequestPath,
       'type': type,
+      'isWatched': isWatched,
+      'approvalStatus': approvalStatus,
     };
   }
 
@@ -92,6 +100,8 @@ class NotificationModel extends Equatable {
     walletRequestId,
     walletImageRequestPath,
     type,
+    isWatched,
+    approvalStatus,
   ];
 }
 

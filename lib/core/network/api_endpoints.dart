@@ -22,4 +22,6 @@ class ApiEndpoints {
   static const String updateRegionPrices = '/api/Admin/UpdateRegionPrices';
   static const String addRegionPrices = '/api/Admin/AddRegionPrices';
   static const String sendNotificationAsync = '/api/Auth/SendNotificationAsync';
+  static const String markNotificationAsWatched = '/api/Admin/MarkAdminNotificationAsWatched';
+  static const String unseenNotificationCount = '/api/Notification/UnseenCount';
 }

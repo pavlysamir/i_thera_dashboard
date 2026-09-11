@@ -108,10 +108,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   // Update the _handleNotificationTap method in notifications_screen.dart
   void _handleNotificationTap(NotificationModel notification) async {
+    context
+        .read<NotificationsCubit>()
+        .markNotificationAsWatched(notification.id);
+
     switch (notification.type) {
       case 0: // Join request
         if (notification.doctorId != null) {
-          final result = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider(
@@ -119,12 +123,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   notificationsRepository: sl(),
                   pushNotificationService: sl(),
                 ),
-                child: DoctorDetailScreen(doctorId: notification.doctorId!),
+                child: DoctorDetailScreen(
+                  doctorId: notification.doctorId!,
+                  notificationId: notification.id,
+                  approvalStatus: notification.approvalStatus,
+                ),
               ),
             ),
           );
 
-          if (result == true && mounted) {
+          if (mounted) {
             context.read<NotificationsCubit>().loadNotifications();
           }
         }
@@ -134,7 +142,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       case 3: // Refund request
         if (notification.doctorId != null &&
             notification.walletRequestId != null) {
-          final result = await Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => BlocProvider(
@@ -146,12 +154,14 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   doctorId: notification.doctorId!,
                   walletRequestId: notification.walletRequestId!,
                   notificationType: notification.type,
+                  notificationId: notification.id,
+                  approvalStatus: notification.approvalStatus,
                 ),
               ),
             ),
           );
 
-          if (result == true && mounted) {
+          if (mounted) {
             context.read<NotificationsCubit>().loadNotifications();
           }
         }
