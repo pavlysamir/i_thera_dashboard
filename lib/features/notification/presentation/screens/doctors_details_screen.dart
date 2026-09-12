@@ -304,12 +304,15 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                             SizedBox(
                               width: 150,
                               child: ElevatedButton(
-                                onPressed: (isLoading || widget.approvalStatus != null)
+                                onPressed:
+                                    (isLoading || widget.approvalStatus != null)
                                     ? null
                                     : () => _showDisapproveDialog(doctorData!),
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -320,9 +323,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                                         width: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                            Colors.white,
-                                          ),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
                                         ),
                                       )
                                     : const Text(
@@ -339,7 +343,8 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                             SizedBox(
                               width: 150,
                               child: ElevatedButton(
-                                onPressed: (isLoading || widget.approvalStatus != null)
+                                onPressed:
+                                    (isLoading || widget.approvalStatus != null)
                                     ? null
                                     : () {
                                         context
@@ -348,7 +353,9 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                                       },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF1E88E5),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -359,9 +366,10 @@ class _DoctorDetailScreenState extends State<DoctorDetailScreen> {
                                         width: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 2,
-                                          valueColor: AlwaysStoppedAnimation<Color>(
-                                            Colors.white,
-                                          ),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
                                         ),
                                       )
                                     : const Text(

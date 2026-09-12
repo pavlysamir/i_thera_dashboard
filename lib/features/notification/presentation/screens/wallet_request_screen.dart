@@ -128,27 +128,29 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
 
             final isLoading = state is WalletRequestReviewLoading;
 
-            return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Left side - Form
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.all(32),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
+            return Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Left side - Form
+                  Expanded(
+                    child: Container(
+                      height: 400,
+
+                      padding: const EdgeInsets.all(32),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.05),
+                            blurRadius: 10,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: SingleChildScrollView(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
@@ -186,11 +188,16 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
                             SizedBox(
                               width: double.infinity,
                               child: AbsorbPointer(
-                                absorbing: isLoading || widget.approvalStatus != null,
+                                absorbing:
+                                    isLoading || widget.approvalStatus != null,
                                 child: Opacity(
-                                  opacity: widget.approvalStatus != null ? 0.4 : 1.0,
+                                  opacity: widget.approvalStatus != null
+                                      ? 0.4
+                                      : 1.0,
                                   child: ElevatedButton(
-                                    onPressed: (isLoading || widget.approvalStatus != null)
+                                    onPressed:
+                                        (isLoading ||
+                                            widget.approvalStatus != null)
                                         ? null
                                         : () {
                                             context
@@ -239,38 +246,40 @@ class _WalletRequestScreenState extends State<WalletRequestScreen> {
                         ),
                       ),
                     ),
+                  ),
 
-                    const SizedBox(width: 24),
+                  const SizedBox(width: 24),
 
-                    // Right side - Receipt Image
-                    Container(
-                      width: 400,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child:
-                            walletRequest.imageURL != null &&
-                                walletRequest.imageURL!.isNotEmpty
-                            ? WebImageDisplay(
-                                imageUrl: walletRequest.imageURL!,
-                                fit: BoxFit.cover,
-                                errorWidget: _buildNoImageWidget(),
-                              )
-                            : _buildNoImageWidget(),
-                      ),
+                  // Right side - Receipt Image
+                  Container(
+                    alignment: Alignment.topRight,
+                    width: 400,
+                    height: 400,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child:
+                          walletRequest.imageURL != null &&
+                              walletRequest.imageURL!.isNotEmpty
+                          ? WebImageDisplay(
+                              imageUrl: walletRequest.imageURL!,
+                              fit: BoxFit.cover,
+                              errorWidget: _buildNoImageWidget(),
+                            )
+                          : _buildNoImageWidget(),
+                    ),
+                  ),
+                ],
               ),
             );
           }
